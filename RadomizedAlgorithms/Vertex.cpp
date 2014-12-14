@@ -10,6 +10,7 @@
 
 Vertex::Vertex(string name) {
 	this->name = name;
+	this->tag = -1;
 	this->neighbours = vector<Vertex*>();
 }
 
