@@ -16,6 +16,7 @@ class MaxCutAlgorithm {
 private:
 	int maxCut(vector<Vertex*> firstSubgraph, vector<Vertex*> secondSubgraph);
 	void printSubgraphs(vector<Vertex*> firstSubgraph, vector<Vertex*> secondSubgraph);
+	void addToSubgraphIfNeighbour(vector<Vertex*> &vertices, Vertex* vertex);
 	
 public:
 	int calculateMaxCut(vector<Vertex*> vertices);

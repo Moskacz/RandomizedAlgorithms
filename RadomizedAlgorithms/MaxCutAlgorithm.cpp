@@ -20,14 +20,25 @@ int MaxCutAlgorithm::calculateMaxCut(vector<Vertex *> vertices) {
 		vector<Vertex*> firstSubgraph = vector<Vertex*>();
 		vector<Vertex*> secondSubgraph = vector<Vertex*>();
 		
-		for (vector<Vertex*>::iterator it = vertices.begin(); it != vertices.end(); it++) {
-			(*it)->tag = rand() % 2;
-			if ( (*it)->tag == 0 ) {
-				firstSubgraph.push_back(*it);
-			} else {
-				secondSubgraph.push_back(*it);
+		while (true) {
+			bool shouldBreak = true;
+			for (vector<Vertex*>::iterator it = vertices.begin(); it != vertices.end(); it++) {
+				if ((*it)->tag == -1) {
+					shouldBreak = false;
+					(*it)->tag = rand() % 2;
+					if ((*it)->tag == 0) {
+						addToSubgraphIfNeighbour(firstSubgraph, *it);
+					} else {
+						addToSubgraphIfNeighbour(secondSubgraph, *it);
+					}
+				}
+			}
+			
+			if (shouldBreak) {
+				break;
 			}
 		}
+		
 	
 		int cut = this->maxCut(firstSubgraph, secondSubgraph);		
 		if (cut > MaxCut) {
@@ -70,4 +81,23 @@ void MaxCutAlgorithm::printSubgraphs(vector<Vertex *> firstSubgraph, vector<Vert
 		cout << (*it)->getName() << " ";
 	}
 	cout << endl;
+}
+
+void MaxCutAlgorithm::addToSubgraphIfNeighbour(vector<Vertex *> &vertices, Vertex *vertex) {
+	if (vertices.empty()) {
+		vertices.push_back(vertex);
+	} else {
+		bool didAddToVector = false;
+		for (vector<Vertex*>::iterator it = vertices.begin(); it != vertices.end(); it++) {
+			if ((*it)->isNeighbour(vertex)) {
+				vertices.push_back(vertex);
+				didAddToVector = true;
+				break;
+			}
+		}
+		
+		if (!didAddToVector) {
+			vertex->tag = -1;
+		}
+	}
 }
